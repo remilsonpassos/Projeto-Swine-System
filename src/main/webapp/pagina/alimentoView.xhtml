@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:opt="http://primefaces.prime.com.tr/optimus"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">Alimento</ui:define>
+
+	<ui:define name="content">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">Cadastro de Alimentos</div>
+			<div class="panel-body">
+				<h:form id="form">
+
+					<h:panelGrid id="panelGrid" columns="2" cellpadding="4">
+						
+						<p:outputLabel value="Escolha o seu tipo de Suíno: " for="@next" />
+						<p:selectOneMenu value="#{alimentoController.alimento.suino}" size="100"
+							id="racaManejo" styleClass="espacoInput" converter="converter"
+							>
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems var="suino" itemValue="#{suino}"
+								itemLabel="#{suino.raca} - #{suino.peso}kg - #{suino.sexo}"
+								value="#{alimentoController.todosSuinos()}" />
+						</p:selectOneMenu>
+					
+						<p:outputLabel value="Nome: " for="@next" />
+						<p:selectOneMenu value="#{alimentoController.alimento.nome}"
+							size="70" id="nome" requiredMessage="Campo obrigatório!"
+							required="true" styleClass="espacoInput" ajax="false">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItem itemLabel="Mandioca" itemValue="Mandioca" />
+							<f:selectItem itemLabel="Milho/Cevada" itemValue="Milho/Cevada" />
+							<f:selectItem itemLabel="Alfafa (Medicago sativa)"
+								itemValue="Alfafa (Medicago sativa)" />
+							<f:selectItem itemLabel="Arroz Oryza sativa"
+								itemValue="Arroz Oryza sativa" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Descrição: " for="@next" />
+						<p:textEditor id="descricao" requiredMessage="Campo obrigatório!"
+							required="true" value="#{alimentoController.alimento.descricao}"
+							widgetVar="editor" width="400" height="200" styleClass="espacoInput" />
+
+
+						<p:outputLabel value="Ativo: " for="@next"/>
+						<p:selectOneMenu value="#{alimentoController.alimento.ativo}"
+							size="70" id="ativo" styleClass="espacoInput"							
+							ajax="false">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItem itemLabel="Sim" itemValue="true" />
+							<f:selectItem itemLabel="Não" itemValue="false" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+
+					<p:commandButton value="Salvar"
+						action="#{alimentoController.salvar()}" styleClass="espacoInput"
+						icon="ui-icon-gear" process="@this" partialSubmit="true"
+						ajax="false" update=":form :dataForm" />
+
+					<p:commandButton value="Limpar" type="submit" ajax="false"
+						immediate="true" update=":form:panelGrid :dataForm:tabela"
+						styleClass="espacoInput" icon="ui-icon-cancel" process="@this"
+						actionListener="#{alimentoController.resetar()}">
+					</p:commandButton>
+
+
+					<p:messages id="msg" />
+				</h:form>
+			</div>
+		</div>
+
+		<!-- ****************************** Data Table ****************************** -->
+		<div class="panel panel-default">
+			<div class="panel-heading">/Alimentos Cadastrados</div>
+			<div class="panel-body">
+				<h:form id="dataForm">
+					<h:panelGrid columns="3">
+						<p:inputText value="#{alimentoController.filtroPaginacao.nome}"
+							size="40" id="nome" style="margin-bottom: 5px;" />
+
+						<p:commandButton value="Consultar" update="tabela" process="@form"
+							ajax="false" style="margin-left: 5px;" />
+					</h:panelGrid>
+
+					<p:dataTable id="tabela" var="s"
+						value="#{alimentoController.model}" rows="5" paginator="true"
+						lazy="true"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single"
+						selection="#{alimentoController.alimento}"
+						rowKey="#{s.idAlimento}" rowIndexVar="rowIndex"
+						emptyMessage="Sem dados no momento">
+
+						<p:ajax event="rowSelect" update=":form :dataForm"
+							immediate="true" listener="#{alimentoController.onRowSelect}"
+							process="@this" />
+
+
+
+						<p:column headerText="# Códgo">
+							<h:outputText value="#{rowIndex + 1}" />
+						</p:column>
+
+						<p:column headerText="Nome" sortBy="#{s.nome}">
+							<h:outputText value="#{s.nome}" />
+						</p:column>
+
+						<p:column headerText="Descrição" sortBy="#{s.descricao}">
+							<h:outputText value="#{s.descricao}" />
+						</p:column>
+
+						<p:column headerText="Ativo" sortBy="#{s.ativo}">
+							<h:outputText value="#{s.ativo == true ? 'Ativo':'Desativado'}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

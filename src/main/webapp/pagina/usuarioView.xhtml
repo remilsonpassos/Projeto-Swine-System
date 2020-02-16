@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:opt="http://primefaces.prime.com.tr/optimus"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">Cadastro</ui:define>
+
+	<ui:define name="content">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">Cadastro de Usuário</div>
+			<div class="panel-body">
+				<h:form id="form">
+					<h:panelGrid id="panelGrid" columns="2" cellpadding="4">
+						<p:outputLabel value="Nome: " for="@next" />
+						<p:inputText value="#{usuarioController.usuario.nome}" size="70"
+							id="nome" maxlength="200" styleClass="espacoInput"
+							placeholder="Nome completo" required="true"
+							requiredMessage="Campo obrigatório!" />
+
+						<p:outputLabel value="CPF: " for="@next" />
+						<p:inputMask mask="999.999.999-99"
+							value="#{usuarioController.usuario.cpf}" size="70"
+							maxlength="200" styleClass="espacoInput" placeholder="Seu CPF"
+							required="true" id="cpf" requiredMessage="Campo obrigatório!" />
+
+						<p:outputLabel value="Login: " for="@next" />
+						<p:inputText value="#{usuarioController.usuario.login}" size="70"
+							id="login" maxlength="200" styleClass="espacoInput"
+							placeholder="Seu Login" required="true"
+							requiredMessage="Campo obrigatório!" />
+
+						<p:outputLabel value="Senha: " for="@next"
+							rendered="#{usuarioController.usuario.idUsuario == 0 or usuarioController.trocarSenha == true}" />
+						<p:password value="#{usuarioController.usuario.senha}" size="70"
+							rendered="#{usuarioController.usuario.idUsuario == 0 or usuarioController.trocarSenha == true}"
+							id="senha" maxlength="200" styleClass="espacoInput"
+							placeholder="Sua Senha" required="true"
+							requiredMessage="Campo obrigatório!" />
+
+						<p:outputLabel value="Perfil: " for="@next" />
+						<p:selectOneMenu value="#{usuarioController.usuario.perfil}"
+							size="70" id="perfil" styleClass="espacoInput"
+							converter="converter" ajax="false">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems var="perfil" itemValue="#{perfil}"
+								itemLabel="#{perfil.nome}"
+								value="#{usuarioController.todosPerfis()}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<p:commandButton value="Salvar"
+						action="#{usuarioController.salvar()}" styleClass="espacoInput"
+						icon="ui-icon-gear" process="@this" partialSubmit="true"
+						ajax="false" update=":form :dataForm" />
+
+					<p:commandButton value="Limpar" type="submit" ajax="false"
+						immediate="true" update=":form:panelGrid :dataForm:tabela"
+						styleClass="espacoInput" icon="ui-icon-cancel" process="@this"
+						actionListener="#{usuarioController.resetar()}">
+					</p:commandButton>
+
+					<p:commandButton value="#{usuarioController.tituloSenha}" ajax="false"
+						rendered="#{usuarioController.usuario.idUsuario != 0}"
+						update=":form:panelGrid" immediate="true" styleClass="espacoInput"
+						action="#{usuarioController.habilitaCampoSenha()}" />
+
+					<p:messages id="msg" />
+				</h:form>
+			</div>
+		</div>
+
+		<!-- ****************************** Data Table ****************************** -->
+		<div class="panel panel-default">
+			<div class="panel-heading">Usuários Cadastrados</div>
+			<div class="panel-body">
+				<h:form id="dataForm">
+					<h:panelGrid columns="3">
+						<p:inputText value="#{usuarioController.filtroPaginacao.nome}"
+							size="40" id="nome" style="margin-bottom: 5px;" />
+
+						<p:commandButton value="Consultar" update="tabela" process="@form"
+							ajax="false" style="margin-left: 5px;" />
+					</h:panelGrid>
+
+					<p:dataTable id="tabela" var="u" value="#{usuarioController.model}"
+						rows="5" paginator="true" lazy="true"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single"
+						selection="#{usuarioController.usuario}" rowKey="#{u.idUsuario}"
+						rowIndexVar="rowIndex" emptyMessage="Sem dados no momento">
+
+						<p:ajax event="rowSelect" update=":form :dataForm"
+							immediate="true" listener="#{usuarioController.onRowSelect}"
+							process="@this" />
+
+						<p:column headerText="# Clique Para Editar">
+							<h:outputText value="#{rowIndex + 1}" />
+						</p:column>
+
+						<p:column headerText="Nome" sortBy="#{u.nome}">
+							<h:outputText value="#{u.nome}" />
+						</p:column>
+
+						<p:column headerText="CPF" sortBy="#{u.cpf}">
+							<h:outputText value="#{u.cpf}" />
+						</p:column>
+
+						<p:column headerText="Login">
+							<h:outputText value="#{u.login}" />
+						</p:column>
+
+						<p:column headerText="Ativo" sortBy="#{u.ativo}">
+							<h:outputText value="#{u.ativo == true ? 'Ativo':'Desativado'}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

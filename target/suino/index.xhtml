@@ -1,0 +1,119 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:opt="http://primefaces.prime.com.tr/optimus"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">Manejo de Suíno</div>
+			<div class="panel-body">
+				<h:form id="formManejoSelect">
+					<h:panelGrid id="panelGridManejo" columns="2" cellpadding="4">
+
+						<p:outputLabel value="Escolha o seu tipo de Suíno: " for="@next" />
+						<p:selectOneMenu value="#{manejoController.suinoSelecionado}"
+							size="70" id="racaManejo" styleClass="espacoInput"
+							converter="converter">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems var="suino" itemValue="#{suino}"
+								itemLabel="#{suino.raca}"
+								value="#{manejoController.todosSuinos()}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<p:commandButton value="Gerar Manejo"
+						action="#{manejoController.getDados()}" styleClass="espacoInput"
+						icon="ui-icon-gear" process="@this" partialSubmit="true"
+						ajax="false" update=":form :dataForm" />
+
+					<p:commandButton value="Limpar" type="submit" ajax="false"
+						immediate="true" update=":form:panelGrid :dataForm:tabela"
+						styleClass="espacoInput" icon="ui-icon-cancel" process="@this"
+						actionListener="#{manejoController.resetar()}">
+					</p:commandButton>
+
+					<p:messages id="msg" />
+				</h:form>
+			</div>
+		</div>
+		<!-- *********************************************** Relatório Manejo rendered="#{manejoController.suino != null}" *************************************************** -->
+
+		<h:form id="formManejo" style="font-size: 20px;"
+			rendered="#{manejoController.exibirManejo == true}">
+
+			<h:commandLink style="float: right;">
+				<p:graphicImage library="img" name="print.ico"
+					style="width: 60px; margin-right: 20px; margin-top: 5px;"
+					title="Imprimir" />
+				<p:printer target="painelPrint" />
+			</h:commandLink>
+
+			<p:panel id="painelPrint">
+				<div style="text-align: left;">
+					<f:facet name="header">
+						<h:graphicImage library="img" name="logo.png"
+								style="width: 100px; margin: auto 40% auto;" />
+					</f:facet>
+					<h:outputLabel
+						value="Raça: #{manejoController.suinoSelecionado.raca} " />
+					<br />
+					<h:outputLabel
+						value="Peso: #{manejoController.suinoSelecionado.peso} Kg" />
+					<br />
+					<h:outputLabel
+						value="Sexo: #{manejoController.suinoSelecionado.sexo == 'M' ? 'MACHO' : 'FÊMEA'}" />
+					<br />
+					<h:outputLabel
+						value="Idade: #{manejoController.suinoSelecionado.idadeSuino.nome} " />
+					<br />
+				</div>
+				<hr />
+				<div style="text-align: left;">
+					<p:dataList value="#{manejoController.suinoSelecionado.criadouro}"
+						var="cri" type="ordered">
+						<f:facet name="header">
+				            Criadouro
+				        </f:facet>
+				        #{cri.nome}: <h:outputText value="#{cri.descricao}"
+							escape="false" />
+					</p:dataList>
+					<br />
+					<p:dataList value="#{manejoController.suinoSelecionado.alimento}"
+						var="al" type="ordered">
+						<f:facet name="header">
+				            Alimentos
+				        </f:facet>
+					        #{al.nome}: <h:outputText value="#{al.descricao}"
+							escape="false" />
+					</p:dataList>
+					<br />
+					<p:dataList value="#{manejoController.suinoSelecionado.vacina}"
+						var="va" type="ordered">
+						<f:facet name="header">
+				            Vacinas
+				        </f:facet>
+					        #{va.nome}: <h:outputText value="#{va.descricao}"
+							escape="false" />
+					</p:dataList>
+				</div>
+			</p:panel>
+
+			<h:commandLink>
+				<p:graphicImage library="img" name="print.ico"
+					style="width: 60px; margin-left: 20px; margin-top: 10px;"
+					title="Imprimir" />
+				<p:printer target="painelPrint" />
+			</h:commandLink>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+
+

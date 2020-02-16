@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:opt="http://primefaces.prime.com.tr/optimus"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet name="bootstrap.min.css" library="css" />
+	<h:outputStylesheet name="bootstrap-theme.min.css" library="css" />
+	<h:outputStylesheet name="mainStyle.css" library="css" />
+
+	<title>JSF - <ui:insert name="title">Home</ui:insert></title>
+
+</h:head>
+
+<h:body>
+
+	<div id="pagina" class="template">
+
+		<div id="header" class="topo">
+			<ui:include src="topo.xhtml" />
+		</div>
+
+		<div id="menu" class="menu">
+
+			<h:form rendered="#{sessaoController.usuario.logado == true}">
+				<p:growl id="messages" />
+
+				<p:menubar>
+				
+				<p:submenu label="Inicio" icon="pi pi-file">
+						<p:menuitem value="Pagina Inicial" url="consulta.xhtml" />
+					</p:submenu>
+					
+					<p:submenu label="Usuario" icon="pi pi-file" rendered="#{sessaoController.usuario.perfil.idPerfil == 1}">
+						<p:menuitem value="Cadastrar" url="usuarioView.xhtml" />
+						<p:separator />
+						<p:menuitem value="Listar" url="" />
+					</p:submenu>
+		
+					<p:submenu label="Administrativo" icon="pi pi-file" >
+						<p:menuitem value="Cadastrar Suino" url="suinoView.xhtml" />
+						<p:menuitem value="Cadastrar Vacina" url="vacinaView.xhtml" />
+						<p:menuitem value="Cadastrar Alimento" url="alimentoView.xhtml" />
+						<p:menuitem value="Cadastrar Criadouro" url="criadouroView.xhtml" />
+						<p:separator />
+					</p:submenu>
+					<f:facet name="options">							
+						<p:commandButton immediate="true" value="Sair" icon="ui-icon-power" action="#{sessaoController.logout()}" 
+						 style="margin-right:20px; background-color: #82efef; font-size: 20px;" />
+					</f:facet>
+				</p:menubar>
+
+			</h:form>
+		</div>
+		
+		<div id="content" class="conteudo">
+			<ui:insert name="content">
+			</ui:insert>
+		</div>
+
+		<div id="footer" class="rodape">
+			<ui:include src="rodape.xhtml" />
+		</div>
+
+	</div>
+</h:body>
+</html>

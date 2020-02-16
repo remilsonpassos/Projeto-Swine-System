@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:opt="http://primefaces.prime.com.tr/optimus"
+	xmlns:p="http://primefaces.org/ui">	
+	
+	<div class="bem-vindo" style="margin-left: 200px;margin-top:50px">
+	<font size="10px" face="forte">	
+		<left>Swine Sistem</left>
+		</font>	
+	</div>
+
+	<div style="margin-top:50px; margin-right:300px">
+		<font size="4px" face="times">
+		<center >Seja Bem-Vindo(a) #{sessaoController.usuario.nome}</center>
+		</font>
+		</div>
+	 
+	<div id="login-dialog">
+		
+		<h:form id="formLogin" rendered="#{sessaoController.usuario.logado != true}" >
+		<h5>Área Administrativa</h5>
+			<p:messages id="msg" />
+
+			<p:panelGrid columns="2" >
+				<p:outputLabel value="Login" for="login" />
+				<p:inputText id="login" size="20" value="#{sessaoController.usuario.login}" required="true" 
+				requiredMessage="Informe o Login!"/>
+
+				<p:outputLabel value="Senha" for="senha" />
+				<p:password id="senha" size="20" value="#{sessaoController.usuario.senha}" required="true"	
+				requiredMessage="Informe a Senha!" />
+
+			</p:panelGrid>
+			<br />
+			<p:commandButton value="Acessar" action="#{sessaoController.logar()}" ajax="false"
+				icon="ui-icon-star" process="@form" update="@form"/>
+
+		</h:form>
+
+	</div>	
+
+
+</ui:composition>
+
+
+
+
+
+
+
+

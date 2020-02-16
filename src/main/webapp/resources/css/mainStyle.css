@@ -1,0 +1,92 @@
+.template {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0px;
+	font-weight: normal
+}
+
+.topo {
+	padding: 5px;
+	margin-bottom: 2px;
+	height: 150px;
+	background-color: #476775;
+	color: #fff;
+	box-shadow: 0px 2px 2px #ccc;
+	background-image:
+		url("#{facesContext.externalContext.requestContextPath}/resources/img/porquinho.png");
+	background-size: 184px;
+	background-repeat: no-repeat !important;
+	background-position: left;
+}
+
+.menu {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.conteudo {
+	padding: 0px 8px;
+	/* margin-left: 10%;
+	margin-right: 10%; */
+	margin-top: 10px;
+}
+
+.rodape {
+	border-top: 1px solid #ccc;
+	padding: 5px 8px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	background-color: #fff;	
+}
+
+.rodapeImg img {
+    max-width:200px;
+    max-height:150px;
+    width: auto;
+    height: auto;
+}
+
+
+.bem-vindo {
+	float: left;
+	margin-left: 20px;
+	margin-top: 100px
+}
+
+.logout {
+	float: right;
+	margin-right: 20px;
+	margin-top: 100px;
+	color: white;
+}
+
+/* tela de Login */
+#login-dialog {
+	/* width: 260px; */
+	/* margin: auto; */
+	/* margin-top: 150px; */
+	float: right;
+	padding: 0 10px 0 10px;
+	margin-top: -85px;
+}
+
+.grid-login {
+	background-color: #f2f2f2;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	margin-top: 8px;
+	padding: -10px !important;
+	width: 100%
+}
+
+.ui-icon {
+	zoom: 125%;
+	-moz-transform: scale(1.25);
+	-webkit-zoom: 1.25;
+	-ms-zoom: 1.25;
+}
+
+.espacoInput {
+	margin-left: 3px !important;
+	margin-top: 10px !important;
+}
